@@ -9,5 +9,5 @@ chrome.runtime.connect(null, { name: 'devtools' });
 chrome.devtools.panels.create(
 	'WebXR',
 	'/icons/icon128.png',
-	'dist/devtool-panel.html',
+	'/dist/devtool-panel.html',
 );

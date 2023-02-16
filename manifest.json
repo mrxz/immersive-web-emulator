@@ -12,7 +12,7 @@
 		"128": "icons/icon128.png"
 	},
 	"background": {
-		"service_worker": "dist/service-worker.js"
+		"scripts": ["dist/service-worker.js"]
 	},
 	"permissions": ["storage", "scripting"],
 	"host_permissions": ["http://*/*", "https://*/*"],
@@ -33,7 +33,12 @@
 		"default_popup": "dist/popup.html"
 	},
 	"manifest_version": 3,
-	"web_accessible_resources": [],
+	"web_accessible_resources": [
+		{
+			"resources": ["dist/webxr-polyfill.js"],
+			"matches": ["http://*/*", "https://*/*"]
+		}
+	],
 	"content_security_policy": {
 		"extension_pages": "script-src 'self'; object-src 'self'"
 	}

@@ -152,21 +152,29 @@ window.addEventListener(
 	false,
 );
 
-EmulatorSettings.instance.load().then(() => {
-	triggerPolyfillAction(POLYFILL_ACTIONS.DEVICE_INIT, {
-		deviceDefinition: DEVICE_DEFINITIONS[EmulatorSettings.instance.deviceKey],
-		stereoEffect: EmulatorSettings.instance.stereoOn,
-	});
-	triggerPolyfillAction(POLYFILL_ACTIONS.ROOM_DIMENSION_CHANGE, {
-		dimension: EmulatorSettings.instance.roomDimension,
-	});
-	triggerPolyfillAction(POLYFILL_ACTIONS.INPUT_MODE_CHANGE, {
-		inputMode: EmulatorSettings.instance.inputMode,
-	});
-	['left', 'right'].forEach((handedness) => {
-		triggerPolyfillAction(POLYFILL_ACTIONS.HAND_POSE_CHANGE, {
-			handedness: handedness,
-			pose: EmulatorSettings.instance.handPoses[handedness + '-hand'],
+// Insert webxr-polyfill
+const scriptTag = document.createElement('script');
+// Wait for the polyfill to load before sending the DEVICE_INIT event
+scriptTag.addEventListener('load', (_) => {
+	EmulatorSettings.instance.load().then(() => {
+		triggerPolyfillAction(POLYFILL_ACTIONS.DEVICE_INIT, {
+			deviceDefinition: DEVICE_DEFINITIONS[EmulatorSettings.instance.deviceKey],
+			stereoEffect: EmulatorSettings.instance.stereoOn,
 		});
+		triggerPolyfillAction(POLYFILL_ACTIONS.ROOM_DIMENSION_CHANGE, {
+			dimension: EmulatorSettings.instance.roomDimension,
+		});
+		triggerPolyfillAction(POLYFILL_ACTIONS.INPUT_MODE_CHANGE, {
+			inputMode: EmulatorSettings.instance.inputMode,
+		});
+		['left', 'right'].forEach((handedness) => {
+			triggerPolyfillAction(POLYFILL_ACTIONS.HAND_POSE_CHANGE, {
+				handedness: handedness,
+				pose: EmulatorSettings.instance.handPoses[handedness + '-hand'],
+			});
+		});
+		sendActionToEmulator(CLIENT_ACTIONS.ENTER_IMMERSIVE);
 	});
 });
+scriptTag.setAttribute('src', browser.runtime.getURL('dist/webxr-polyfill.js'));
+(document.head || document.documentElement).appendChild(scriptTag);
