@@ -6,6 +6,11 @@ tags:
   - WEBXR
 ---
 
+> # This is a fork allowing the extension to be used with Firefox.
+> The original extension makes use of some features of Manifest v3 that don't work in Firefox yet. To workaround these, the background service worker is replaced with a background event page. The webxr-polyfill is injected by the content-script instead of being a content-script itself.
+>
+> There is one drawback, the polyfill initialization might occur _after_ other scripts on a page. This can result in the page incorrectly assuming WebXR is not supported. It's recommended that you set `dom.vr.webxr.enabled` to true in `about:config` to work around this.
+
 Immersive Web Emulator is a browser extension that assists WebXR content creation. It enables developers to responsively run [WebXR](https://www.w3.org/TR/webxr/) apps on a desktop browser without the need of an XR device.
 
 Inspired by the [official WebXR Emulator Extension by Mozilla Reality](https://github.com/MozillaReality/WebXR-emulator-extension/) and our previous efforts of extending it for better functionality, Immersive Web Emulator is designed and rebuilt from the ground up with an emphasis on full input emulation (including touch and analog input), better usability with a re-engineered UI, and more features, such as keyboard input mirroring and input session recording/playback, specifically for Meta Quest headsets.
