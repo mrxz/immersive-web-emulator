@@ -5,8 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { generateUUID } from 'three/src/math/MathUtils';
-
 const PORT_DESTINATION_MAPPING = {
 	iwe_app: 'iwe_devtool',
 	iwe_devtool: 'iwe_app',
@@ -45,16 +43,3 @@ chrome.runtime.onConnect.addListener((port) => {
 		});
 	}
 });
-
-// in MV3, only injecting here can properly inject the polyfill into the WebXR experience
-// eslint-disable-next-line no-undef
-chrome.scripting.registerContentScripts([
-	{
-		id: 'polyfill-injection' + generateUUID(),
-		matches: ['http://*/*', 'https://*/*'],
-		js: ['dist/webxr-polyfill.js'],
-		allFrames: true,
-		runAt: 'document_start',
-		world: 'MAIN',
-	},
-]);
