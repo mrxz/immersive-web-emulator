@@ -10,7 +10,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 import css from 'rollup-plugin-import-css';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
+import replace from 'rollup-plugin-replace';
+import { string } from 'rollup-plugin-string';
+
 export default [
 	{
 		input: './src/devtool/devtool-panel.jsx',
@@ -68,6 +70,9 @@ export default [
 			replace({
 				preventAssignment: true,
 				'process.env.NODE_ENV': JSON.stringify('production'),
+			}),
+			string({
+				include: "./dist/webxr-polyfill.js",
 			}),
 			nodeResolve(),
 			commonjs(),
