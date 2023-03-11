@@ -11,6 +11,7 @@ import copy from 'rollup-plugin-copy';
 import css from 'rollup-plugin-import-css';
 import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
+import { string } from 'rollup-plugin-string';
 
 export default [
 	{
@@ -54,6 +55,9 @@ export default [
 		plugins: [
 			replace({
 				'process.env.NODE_ENV': JSON.stringify('production'),
+			}),
+			string({
+				include: "./dist/webxr-polyfill.js",
 			}),
 			resolve(),
 			commonjs(),
