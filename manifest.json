@@ -33,12 +33,6 @@
 		"default_popup": "dist/popup.html"
 	},
 	"manifest_version": 3,
-	"web_accessible_resources": [
-		{
-			"resources": ["dist/webxr-polyfill.js"],
-			"matches": ["http://*/*", "https://*/*"]
-		}
-	],
 	"content_security_policy": {
 		"extension_pages": "script-src 'self'; object-src 'self'"
 	}
