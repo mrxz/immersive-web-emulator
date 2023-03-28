@@ -104,12 +104,12 @@ const triggerPolyfillAction = (action, payload) => {
 	);
 };
 
-const sendActionToEmulator = (action) => {
+const sendActionToEmulator = (action, detail) => {
 	try {
-		connection.port.postMessage({ action });
+		connection.port.postMessage({ action, detail });
 	} catch (_e) {
 		connection.connect();
-		connection.port.postMessage({ action });
+		connection.port.postMessage({ action, detail });
 	}
 };
 
@@ -125,6 +125,14 @@ window.addEventListener(
 	CLIENT_ACTIONS.EXIT_IMMERSIVE,
 	() => {
 		sendActionToEmulator(CLIENT_ACTIONS.EXIT_IMMERSIVE);
+	},
+	false,
+);
+
+window.addEventListener(
+	CLIENT_ACTIONS.CONTROLLER_HAPTICS_CHANGE,
+	(event) => {
+		sendActionToEmulator(CLIENT_ACTIONS.CONTROLLER_HAPTICS_CHANGE, event.detail);
 	},
 	false,
 );

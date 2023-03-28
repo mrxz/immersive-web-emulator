@@ -42,4 +42,6 @@ export const POLYFILL_ACTIONS = {
 export const CLIENT_ACTIONS = {
 	ENTER_IMMERSIVE: 'ca-enter-immersive',
 	EXIT_IMMERSIVE: 'ca-exit-immersive',
+
+	CONTROLLER_HAPTICS_CHANGE: 'ca-controller-haptics-change',
 };

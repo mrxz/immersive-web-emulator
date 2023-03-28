@@ -15,6 +15,10 @@ export const emulatorStates = {
 	inImmersive: false,
 	actionMappingOn: true,
 	assetNodes: {},
+	hapticActuatorStates: {
+		'left-controller': 0,
+		'right-controller': 0,
+	},
 	controllers: {
 		'left-controller': {
 			joystick: {

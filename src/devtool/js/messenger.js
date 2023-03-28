@@ -26,6 +26,22 @@ const connection = {
 				case CLIENT_ACTIONS.EXIT_IMMERSIVE:
 					emulatorStates.inImmersive = false;
 					break;
+				case CLIENT_ACTIONS.CONTROLLER_HAPTICS_CHANGE:
+					{
+						const detail = payload.detail;
+						const controller = `${detail.handedness}-controller`;
+						emulatorStates.hapticActuatorStates[controller] = detail.value;
+
+						const icon = document.querySelector(`#${controller}-component .card-header .control-icon`);
+						if (icon) {
+							if (detail.value > 0) {
+								icon.classList.add('shake');
+							} else {
+								icon.classList.remove('shake');
+							}
+						}
+					}
+					break;
 			}
 		});
 		connection.port.onDisconnect.addListener(connection.connect);

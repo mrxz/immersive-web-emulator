@@ -1,4 +1,5 @@
 import { CLIENT_ACTIONS, POLYFILL_ACTIONS } from '../src/devtool/js/actions';
+import { GamepadHapticActuator, GamepadHapticActuatorType } from './gamepad/GamepadHapticActuator';
 import { mat4, quat, vec3 } from 'gl-matrix';
 
 import GamepadMappings from 'webxr-polyfill/src/devices/GamepadMappings';
@@ -338,6 +339,18 @@ export default class EmulatedXRDevice extends XRDevice {
 					inputSourceImpl.primarySqueezeActionPressed =
 						primarySqueezeActionPressed;
 				}
+
+				// Update actuators
+				gamepad.hapticActuators.forEach((actuator, index) => {
+					if (actuator._update()) {
+						dispatchCustomEvent(CLIENT_ACTIONS.CONTROLLER_HAPTICS_CHANGE, {
+							gamepad: i,
+							hapticActuator: index,
+							handedness: inputSourceImpl.inputSource.handedness,
+							value: actuator._value,
+						});
+					}
+				});
 			}
 
 			this._hitTest(sessionId, this.hitTestSources, this.hitTestResults);
@@ -815,6 +828,7 @@ export default class EmulatedXRDevice extends XRDevice {
 			const id = controller.id || '';
 			const hasPosition = controller.hasPosition || false;
 			const buttonNum = controller.buttonNum || 0;
+			const hapticActuatorNum = controller.hapticActuatorNum || 0;
 			const primaryButtonIndex =
 				controller.primaryButtonIndex !== undefined
 					? controller.primaryButtonIndex
@@ -824,7 +838,7 @@ export default class EmulatedXRDevice extends XRDevice {
 					? controller.primarySqueezeButtonIndex
 					: -1;
 			this.gamepads.push(
-				createGamepad(id, i === 0 ? 'right' : 'left', buttonNum, hasPosition),
+				createGamepad(id, i === 0 ? 'right' : 'left', buttonNum, hasPosition, hapticActuatorNum),
 			);
 			// @TODO: targetRayMode should be screen for right controller(pointer) in AR
 			const imputSourceImpl = new GamepadXRInputSource(
@@ -985,7 +999,7 @@ class Session {
 	}
 }
 
-const createGamepad = (id, hand, buttonNum, hasPosition) => {
+const createGamepad = (id, hand, buttonNum, hasPosition, hapticActuatorNum) => {
 	const buttons = [];
 	for (let i = 0; i < buttonNum; i++) {
 		buttons.push({
@@ -994,6 +1008,10 @@ const createGamepad = (id, hand, buttonNum, hasPosition) => {
 			value: 0.0,
 		});
 	}
+	const hapticActuators = [];
+	for (let i = 0; i < hapticActuatorNum; i++) {
+		hapticActuators.push(new GamepadHapticActuator(GamepadHapticActuatorType.VIBRATION));
+	}
 	return {
 		id: id || '',
 		pose: {
@@ -1001,8 +1019,9 @@ const createGamepad = (id, hand, buttonNum, hasPosition) => {
 			position: [0, 0, 0],
 			orientation: [0, 0, 0, 1],
 		},
-		buttons: buttons,
-		hand: hand,
+		buttons,
+		hapticActuators,
+		hand,
 		mapping: 'xr-standard',
 		axes: [0, 0],
 	};

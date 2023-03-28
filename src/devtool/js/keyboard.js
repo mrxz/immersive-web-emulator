@@ -214,6 +214,7 @@ export const setupKeyboardControlButtons = () => {
 			'button-pressed',
 			EmulatorSettings.instance.actionMappingOn,
 		);
+	// FIXME: This alert doesn't seem to work in Firefox
 	document.getElementById('keyboard-mapping').onclick = function () {
 		alert(`
       Left Controller Mapping:
