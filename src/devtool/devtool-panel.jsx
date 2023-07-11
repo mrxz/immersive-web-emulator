@@ -14,6 +14,7 @@ import { EmulatorSettings, emulatorStates } from './js/emulatorStates.js';
 import App from './jsx/app.jsx';
 import EmulatedDevice from './js/emulatedDevice.js';
 import React from 'react';
+import { SockpuppetConnection } from './js/sockpuppetConnection';
 import { createRoot } from 'react-dom/client';
 import { syncDevicePose } from './js/messenger.js';
 
@@ -21,6 +22,8 @@ EmulatorSettings.instance.load().then(() => {
 	const device = new EmulatedDevice();
 	device.on('pose', syncDevicePose);
 	emulatorStates.emulatedDevice = device;
+
+	const sockpuppetConnection = new SockpuppetConnection();
 
 	const domNode = document.getElementById('app');
 	const root = createRoot(domNode);
