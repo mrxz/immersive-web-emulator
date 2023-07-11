@@ -6,7 +6,6 @@
  */
 
 import { EMULATOR_ACTIONS } from '../devtool/js/actions';
-import { EmulatorSettings } from '../devtool/js/emulatorStates';
 
 const PORT_DESTINATION_MAPPING = {
 	iwe_app: 'iwe_devtool',
@@ -14,44 +13,6 @@ const PORT_DESTINATION_MAPPING = {
 };
 
 const connectedTabs = {};
-
-const injectionId = 'iwe-polyfill-injection';
-
-const updateInjection = (reloadTabId = null) => {
-	EmulatorSettings.instance.load().then(() => {
-		chrome.scripting.getRegisteredContentScripts(
-			{ ids: [injectionId] },
-			(scripts) => {
-				if (scripts.length == 0) {
-					chrome.scripting.registerContentScripts([
-						{
-							id: injectionId,
-							matches: ['http://*/*', 'https://*/*'],
-							js: ['dist/webxr-polyfill.js'],
-							allFrames: true,
-							runAt: 'document_start',
-							world: 'MAIN',
-							excludeMatches: Array.from(
-								EmulatorSettings.instance.polyfillExcludes,
-							),
-						},
-					]);
-				} else {
-					scripts.forEach((script) => {
-						script.excludeMatches = Array.from(
-							EmulatorSettings.instance.polyfillExcludes,
-						);
-					});
-					chrome.scripting.updateContentScripts(scripts, () => {
-						if (reloadTabId) {
-							chrome.tabs.reload(reloadTabId);
-						}
-					});
-				}
-			},
-		);
-	});
-};
 
 const relayMessage = (tabId, port, message) => {
 	const destinationPorts =
@@ -66,7 +27,8 @@ chrome.runtime.onConnect.addListener((port) => {
 		port.onMessage.addListener((message, sender) => {
 			const tabId = message.tabId ?? sender.sender.tab.id;
 			if (message.action === EMULATOR_ACTIONS.EXCLUDE_POLYFILL) {
-				updateInjection(tabId);
+				// TODO
+				//updateInjection(tabId);
 			}
 			if (!connectedTabs[tabId]) {
 				connectedTabs[tabId] = {};
@@ -87,4 +49,3 @@ chrome.runtime.onConnect.addListener((port) => {
 	}
 });
 
-updateInjection();
