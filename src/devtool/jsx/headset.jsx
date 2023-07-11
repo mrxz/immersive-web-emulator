@@ -47,31 +47,6 @@ export default function HeadsetBar({ device }) {
 		EmulatorSettings.instance.write();
 	}
 
-	const updatePolyfillState = (tab) => {
-		const url = new URL(tab.url);
-		const urlMatchPattern = url.origin + '/*';
-		setPolyfillOn(
-			!EmulatorSettings.instance.polyfillExcludes.has(urlMatchPattern),
-		);
-	};
-
-	React.useEffect(() => {
-		// check every time navigation happens on the tab
-		chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-			if (
-				tabId === chrome.devtools.inspectedWindow.tabId &&
-				changeInfo.status === 'complete'
-			) {
-				updatePolyfillState(tab);
-			}
-		});
-
-		// check on start up
-		chrome.tabs.get(chrome.devtools.inspectedWindow.tabId, (tab) => {
-			updatePolyfillState(tab);
-		});
-	});
-
 	return (
 		<div className="card headset-card">
 			<div
