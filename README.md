@@ -3,6 +3,11 @@
     <h1 align="center">Immersive Web Emulator 2.0</h1>
 </p>
 
+> [!NOTE]
+> **This is a fork allowing the extension to be used with Firefox.**
+> The original extension makes use of a background service worker. This is a Manifest v3 feature that is not yet supported in Firefox (https://bugzilla.mozilla.org/show_bug.cgi?id=1573659). Instead a background page is used instead.
+
+
 <p align="center">
     <a href="https://chromewebstore.google.com/detail/immersive-web-emulator/cgffilbpcibhmcfbgggfhfolhkfbhmik"><img src="https://badgen.net/chrome-web-store/v/cgffilbpcibhmcfbgggfhfolhkfbhmik" alt="store version" /></a>
     <a href="https://chromewebstore.google.com/detail/immersive-web-emulator/cgffilbpcibhmcfbgggfhfolhkfbhmik"><img src="https://badgen.net/chrome-web-store/rating/cgffilbpcibhmcfbgggfhfolhkfbhmik" alt="store rating" /></a>

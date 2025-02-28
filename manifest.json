@@ -11,7 +11,7 @@
 		"128": "icons/default128.png"
 	},
 	"background": {
-		"service_worker": "build/service-worker.min.js"
+		"scripts": ["build/service-worker.min.js"]
 	},
 	"permissions": ["storage", "scripting", "webNavigation"],
 	"host_permissions": ["http://*/*", "https://*/*"],
